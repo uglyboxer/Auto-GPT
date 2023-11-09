@@ -3,7 +3,8 @@ from __future__ import annotations
 
 import json
 
-from duckduckgo_search import ddg
+# from duckduckgo_search import ddg
+from duckduckgo_search import DDGS
 
 from autogpt.commands.command import command
 from autogpt.config import Config
@@ -22,11 +23,12 @@ def google_search(query: str, num_results: int = 8) -> str:
     Returns:
         str: The results of the search.
     """
+    print("USING DDGS")
     search_results = []
     if not query:
         return json.dumps(search_results)
-
-    results = ddg(query, max_results=num_results)
+    print("Running the new local version .....")
+    results = DDGS().text(query) #, max_results=num_results)
     if not results:
         return json.dumps(search_results)
 
@@ -58,6 +60,7 @@ def google_official_search(query: str, num_results: int = 8) -> str | list[str]:
     from googleapiclient.discovery import build
     from googleapiclient.errors import HttpError
 
+    print("Running the official version .....")
     try:
         # Get the Google API key and Custom Search Engine ID from the config file
         api_key = CFG.google_api_key

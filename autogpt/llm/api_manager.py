@@ -87,6 +87,7 @@ class ApiManager(metaclass=Singleton):
             + completion_tokens * COSTS[model]["completion"]
         ) / 1000
         logger.debug(f"Total running cost: ${self.total_cost:.3f}")
+        print(f"The total running cost is ${self.total_cost:.3f}.")
 
     def set_total_budget(self, total_budget):
         """

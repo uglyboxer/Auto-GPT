@@ -2,11 +2,13 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import os
 import os.path
 from typing import Dict, Generator, Literal, Tuple
 
 import charset_normalizer
+import pandas as pd
 import requests
 from colorama import Back, Fore
 from requests.adapters import HTTPAdapter, Retry
@@ -214,6 +216,32 @@ def write_to_file(filename: str, text: str) -> str:
         os.makedirs(directory, exist_ok=True)
         with open(filename, "w", encoding="utf-8") as f:
             f.write(text)
+        log_operation("write", filename, checksum)
+        return "File written to successfully."
+    except Exception as err:
+        return f"Error: {err}"
+
+
+@command("append_to_csv", "Append to csv", '"filename": "<filename>", "json_string": "<fieldname>:<value>"')
+def append_to_csv(filename: str, json_string: str) -> str:
+    """Append to a csv file
+
+    Args:
+        filename (str): The name of the file to write to
+        json (str): The json to append to the file
+    Returns:
+        str: A message indicating success or failure
+    """
+    checksum = text_checksum(json_string)
+    if is_duplicate_operation("write", filename, checksum):
+        return "Error: File has already been updated."
+    try:
+        directory = os.path.dirname(filename)
+        os.makedirs(directory, exist_ok=True)
+        data = json.loads(json_string)
+        data = {k: [v] for k, v in data.items()}
+        df = pd.DataFrame(data)
+        df.to_csv(filename, mode="a", header=False, index=False)
         log_operation("write", filename, checksum)
         return "File written to successfully."
     except Exception as err:

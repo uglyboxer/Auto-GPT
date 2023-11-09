@@ -110,7 +110,7 @@ Latest Development:
 {new_events}
 """
 '''
-
+    print(">>>>> history prompt: ", prompt)
     messages = [
         {
             "role": "user",

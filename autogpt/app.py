@@ -169,6 +169,36 @@ def get_hyperlinks(url: str) -> Union[str, List[str]]:
     return scrape_links(url)
 
 
+@command("get_social_media_hyperlinks", "Get social media links", '"url": "<url>"')
+@validate_url
+def get_social_media_hyperlinks(url: str) -> Union[str, List[str]]:
+    """Return the links for known social media platforms
+
+    Args:
+        url (str): The url to scrape
+
+    Returns:
+        str or list: The hyperlinks on the page
+    """
+    links = scrape_links(url)
+    links = [x.lower() for x in links]
+    social_media_links = []
+    for link in links:
+        if "facebook" in link:
+            social_media_links.append(link)
+        elif "twitter" in link:
+            social_media_links.append(link)
+        elif "instagram" in link:
+            social_media_links.append(link)
+        elif "youtube" in link:
+            social_media_links.append(link)
+        elif "pinterest" in link:
+            social_media_links.append(link)
+        elif "linkedin" in link:
+            social_media_links.append(link)
+    return social_media_links
+
+
 @command(
     "start_agent",
     "Start GPT Agent",

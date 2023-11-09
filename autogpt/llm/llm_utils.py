@@ -112,7 +112,7 @@ def create_chat_completion(
     messages: List[Message],  # type: ignore
     model: Optional[str] = None,
     temperature: float = None,
-    max_tokens: Optional[int] = None,
+    max_tokens: Optional[int] = 2500 #None,
 ) -> str:
     """Create a chat completion using the OpenAI API
 
@@ -134,6 +134,7 @@ def create_chat_completion(
     logger.debug(
         f"{Fore.GREEN}Creating chat completion with model {model}, temperature {temperature}, max_tokens {max_tokens}{Fore.RESET}"
     )
+    # logger.debug(f"Prompt messages sent: {messages}")
     for plugin in cfg.plugins:
         if plugin.can_handle_chat_completion(
             messages=messages,
